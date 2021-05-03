@@ -6,7 +6,10 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 
+import * as Joi from 'joi'; // 👈
+
 import { enviroments } from './enviroments'; // 👈
+import config from './config'; // 👈 Importamos la configuracion
 
 @Module({
   imports: [
@@ -17,7 +20,14 @@ import { enviroments } from './enviroments'; // 👈
     ConfigModule.forRoot({
       // 👈 Implement ConfigModule
       envFilePath: enviroments[process.env.NODE_ENV] || '.env', // 👈 Utilizamos enviroments para leer el archivo a leer
+      load: [config], // 👈 Cargamos la configuracion para inyectar
       isGlobal: true, // Indicamos que la configuracion sera Global y todos la podran usar
+      validationSchema: Joi.object({
+        // 👈 Utilizamos la libreria de JOI para las validaciones
+        API_KEY: Joi.number().required(), //Validamos que API_KEY sea numero y sera requerido
+        DATABASE_NAME: Joi.string().required(), //Validamos que DATABASE_NAME sea string y sera requerido
+        DATABASE_PORT: Joi.number().required(), //Validamos que DATABASE_PORT sea numero y sera requerido
+      }),
     }),
   ],
   controllers: [AppController],
