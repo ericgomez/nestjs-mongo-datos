@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException, Inject } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 
 import { User } from '../entities/user.entity';
 import { Order } from '../entities/order.entity';
@@ -11,7 +12,7 @@ export class UsersService {
   // Realizamos la inyeccion del motodo ProductsService
   constructor(
     private productsService: ProductsService,
-    @Inject('API_KEY') private apiKey: string,
+    private configService: ConfigService,
   ) {}
 
   private counterId = 1;
@@ -25,6 +26,10 @@ export class UsersService {
   ];
 
   findAll() {
+    // Utilizo el servico para traer cualquier variable de .env
+    const apiKey = this.configService.get('API_KEY'); // 👈 get API_KEY
+    const dbName = this.configService.get('DATABASE_NAME'); // 👈 get DATABASE_NAME
+    console.log(apiKey, dbName);
     return this.users;
   }
 
