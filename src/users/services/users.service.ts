@@ -1,10 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { User } from '../entities/user.entity';
+import { Order } from '../entities/order.entity';
+
+import { ProductsService } from './../../products/services/products.service';
 import { CreateUserDto, UpdateUserDto } from '../dtos/user.dto';
 
 @Injectable()
 export class UsersService {
+  // Realizamos la inyeccion del motodo ProductsService
+  constructor(private productsService: ProductsService) {}
+
   private counterId = 1;
   private users: User[] = [
     {
@@ -54,5 +60,15 @@ export class UsersService {
     }
     this.users.splice(index, 1);
     return true;
+  }
+
+  getOrderByUser(id: number): Order {
+    // 👈 new method
+    const user = this.findOne(id);
+    return {
+      date: new Date(),
+      user,
+      products: this.productsService.findAll(),
+    };
   }
 }
