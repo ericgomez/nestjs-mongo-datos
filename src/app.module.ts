@@ -6,6 +6,8 @@ import { ProductsModule } from './products/products.module';
 import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 
+import { enviroments } from './enviroments'; // 👈
+
 @Module({
   imports: [
     ProductsModule,
@@ -14,7 +16,7 @@ import { DatabaseModule } from './database/database.module';
     DatabaseModule,
     ConfigModule.forRoot({
       // 👈 Implement ConfigModule
-      envFilePath: '.env', // Archivo a leer
+      envFilePath: enviroments[process.env.NODE_ENV] || '.env', // 👈 Utilizamos enviroments para leer el archivo a leer
       isGlobal: true, // Indicamos que la configuracion sera Global y todos la podran usar
     }),
   ],
