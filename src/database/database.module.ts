@@ -1,5 +1,8 @@
 import { Module, Global } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config'; // Configuracion de typado
 import { MongoClient } from 'mongodb';
+
+import config from '../config'; // 👈 import config
 
 const API_KEY = '12345634';
 const API_KEY_PROD = 'PROD1212121SA';
@@ -20,17 +23,26 @@ const API_KEY_PROD = 'PROD1212121SA';
     {
       provide: 'MONGO', // Creamos un nuevo proveedor
       // 👈 Inject w/ useFactory
-      useFactory: async () => {
+      useFactory: async (configService: ConfigType<typeof config>) => {
+        const {
+          connection,
+          user,
+          password,
+          host,
+          port,
+          dbName,
+        } = configService.mongo; // 👈 Obtenemos la configuracion de las variables de entorno de mongo
+
         // URL de conexion a la base de datos de mongo
-        const uri =
-          'mongodb://root:root@localhost:27017/?authSource=admin&readPreference=primary';
+        const uri = `${connection}://${user}:${password}@${host}:${port}/?authSource=admin&readPreference=primary`;
         // Creamos la instancia de mongoClient
         const client = new MongoClient(uri);
         await client.connect(); // Conectamos al cliente
-        const database = client.db('platzi-store'); // Indicamos la base de datos de la conexcion
+        const database = client.db(dbName); // Indicamos la base de datos de la conexcion
         return database; // Retornamos la base de datos como un inyectable para la base de datos
         // Este metodo utiliza el patron SINGLETON - Crea la instancia una sola vez por parte de Nest
       },
+      inject: [config.KEY], // 👈 Inject dependecias que queremos inyectar
     },
   ],
   // Con exports indicamos que nuestro provide pueda ser utilizado por cualquier componente
