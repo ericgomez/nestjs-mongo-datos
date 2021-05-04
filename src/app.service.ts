@@ -19,5 +19,8 @@ export class AppService {
     // Imprimos el valor de inyectado
     return `Hello World! ${apiKey} ${name}`;
   }
-  getTasks() {} // 👈 Create new method
+  getTasks() {
+    const taskCollection = this.database.collection('tasks'); // Indicamos la coleccion
+    return taskCollection.find().toArray(); // Obtenemos y retornamos todas las tareas de la coleccion indicada
+  }
 }
