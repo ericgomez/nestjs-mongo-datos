@@ -11,7 +11,7 @@ export class Product extends Document {
   @Prop() // Indicamos que la variable sera una propiedad
   description: string;
 
-  @Prop({ type: Number }) // Indicamos que la variable sera una propiedad y sera numerica
+  @Prop({ type: Number, index: true }) // Indicamos que la variable sera una propiedad y sera numerica, tabien tendra indexacion
   price: number;
 
   @Prop({ type: Number }) // Indicamos que la variable sera una propiedad y sera numerica
@@ -22,3 +22,5 @@ export class Product extends Document {
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product); // Exportamos un esquema apartir de la clase Product
+// 👈 Otra forma es una indexacion compuesta
+ProductSchema.index({ price: 1, stock: -1 }); // En price indicamos el orden ascendente y en stock indicamos el orden descendente
