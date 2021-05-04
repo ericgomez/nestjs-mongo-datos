@@ -20,6 +20,9 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(3000);
+  // Abilitamos Cors que es una característica de seguridad del navegador que permite las solicitudes HTTP de origen cruzado.
+  // Es decir pemite que acceden a las API alojadas en un dominio u origen distinto.
+  app.enableCors();
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();
