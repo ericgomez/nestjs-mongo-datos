@@ -1,4 +1,4 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
 @Schema() // El decorador @Schema() marca una clase como definición de esquema.
@@ -19,6 +19,16 @@ export class Product extends Document {
 
   @Prop() // Indicamos que la variable sera una propiedad
   image: string;
+
+  // Indicamos que la variable sera una propiedad
+  @Prop(
+    //Indicamos que tandra SubObjecto (SubDocuemnto)
+    raw({
+      name: { type: String }, // Indicamos que name es de tipo String
+      image: { type: String }, // Indicamos que image es de tipo String
+    }),
+  )
+  category: Record<string, any>; // 👈 Forma de resolver una relacion
 }
 
 export const ProductSchema = SchemaFactory.createForClass(Product); // Exportamos un esquema apartir de la clase Product

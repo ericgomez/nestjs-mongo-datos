@@ -7,8 +7,10 @@ import {
   IsOptional, // 👈 new decorator
   Min, // 👈 new decorator
   ValidateIf, // 👈 new decorator que Vuelve condional algunos parametros
+  ValidateNested, // 👈 new decorator que permite realizar validaciones en cascada
 } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger'; // swagger espara docuemtar la API
+import { CreateCategoryDto } from './category.dtos'; // Importamos category.dtos
 
 export class CreateProductDto {
   @IsString()
@@ -36,6 +38,11 @@ export class CreateProductDto {
   @IsNotEmpty()
   @ApiProperty() // 👈 use ApiProperty
   readonly image: string;
+
+  @IsNotEmpty() // Indicamos que category no sera vacio
+  @ValidateNested() // Indicamos que category contendra otro docuemnto demanera embebida en cascada
+  @ApiProperty() // Permite que swagger comprenda el tipo de datos de los campos json y más
+  readonly category: CreateCategoryDto; // 👈 new field
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
