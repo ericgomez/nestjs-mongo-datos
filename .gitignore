@@ -36,3 +36,6 @@ lerna-debug.log*
 # environments
 .env
 *.env
+
+# Ignoramos el volumen de docker que contiene los datos de la base de mogoDB
+/mongo_data
