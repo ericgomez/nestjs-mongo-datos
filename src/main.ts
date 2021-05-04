@@ -9,6 +9,10 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
+      transformOptions: {
+        // Realizamos una tranformacion automatica para que lo que venga por queryParams lo transforme automaticamente
+        enableImplicitConversion: true,
+      },
     }),
   );
 

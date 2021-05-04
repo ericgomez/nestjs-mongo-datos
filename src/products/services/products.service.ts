@@ -3,7 +3,11 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 
 import { Product } from './../entities/product.entity';
-import { CreateProductDto, UpdateProductDto } from './../dtos/products.dtos';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+  FilterProductsDto,
+} from './../dtos/products.dtos';
 
 @Injectable()
 export class ProductsService {
@@ -11,7 +15,13 @@ export class ProductsService {
     @InjectModel(Product.name) private productModel: Model<Product>, // 👈 Indicamos que necesitamos inyectar Product.name y agregamos tipado
   ) {}
 
-  findAll() {
+  // Con el ? indicamos que los parametros son opcionales
+  findAll(params?: FilterProductsDto) {
+    // Validamos si existen los parametros
+    if (params) {
+      const { limit, offset } = params; // Obtenemos los parametros
+      return this.productModel.find().skip(offset).limit(limit).exec(); // 👈 retornamos los productos pero con los filtros para la paginacion
+    }
     return this.productModel.find().exec(); // exec() indicamos la ejecucion
   }
 

@@ -4,6 +4,8 @@ import {
   IsUrl,
   IsNotEmpty,
   IsPositive,
+  IsOptional, // 👈 new decorator
+  Min, // 👈 new decorator
 } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger'; // swagger espara docuemtar la API
 
@@ -36,3 +38,15 @@ export class CreateProductDto {
 }
 
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
+
+// 👈 new DTO
+export class FilterProductsDto {
+  // Creamos los atributos
+  @IsOptional() // El  atributo limit es opcional
+  @IsPositive() // El  atributo limit debe ser positivo
+  limit: number;
+
+  @IsOptional() // El atributo offset es opcional
+  @Min(0) // El atributo offset debe tener un minimo de 0 en adelante
+  offset: number;
+}
