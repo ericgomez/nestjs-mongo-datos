@@ -24,32 +24,30 @@ export class ProductsService {
     return product;
   }
 
-  // create(data: CreateProductDto) {
-  //   this.counterId = this.counterId + 1;
-  //   const newProduct = {
-  //     id: this.counterId,
-  //     ...data,
-  //   };
-  //   this.products.push(newProduct);
-  //   return newProduct;
-  // }
+  create(data: CreateProductDto) {
+    const newProduct = new this.productModel(data); // Creamos una nueva instancia de un modelo y le enviamos al informacion
+    return newProduct.save(); // Gurdamos el producto y lo retornamos
+  }
 
-  // update(id: number, changes: UpdateProductDto) {
-  //   const product = this.findOne(id);
-  //   const index = this.products.findIndex((item) => item.id === id);
-  //   this.products[index] = {
-  //     ...product,
-  //     ...changes,
-  //   };
-  //   return this.products[index];
-  // }
+  // Cambiamos el tipado de id dado que de Mongo recibimos Strings
+  update(id: string, changes: UpdateProductDto) {
+    const product = this.productModel
+      // $set indicamos que solo cambie los atributos modifcados y No todo el modelo
+      // new: true es una bandera que indica que nos muestre la nueva version del  producto actualizado
+      .findByIdAndUpdate(id, { $set: changes }, { new: true }) // Buscamos el metodo findByIdAndUpdate y pasamos lo que queremos que cambie
+      .exec(); // Ejecutamos
 
-  // remove(id: number) {
-  //   const index = this.products.findIndex((item) => item.id === id);
-  //   if (index === -1) {
-  //     throw new NotFoundException(`Product #${id} not found`);
-  //   }
-  //   this.products.splice(index, 1);
-  //   return true;
-  // }
+    // Si el producto no exite
+    if (!product) {
+      throw new NotFoundException(`Product #${id} not found`);
+    }
+
+    // Si el producto existe lo retornamos
+    return product;
+  }
+
+  // Cambiamos el tipado de id dado que de Mongo recibimos Strings
+  remove(id: string) {
+    return this.productModel.findByIdAndDelete(id); // Ejecutamos el metodo que busca por id y lo elimina
+  }
 }
