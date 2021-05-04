@@ -1,11 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config'; // 👈 Import ConfigType
+import { Db } from 'mongodb';
+
 import config from './config'; // 👈
 @Injectable()
 export class AppService {
   constructor(
     // @Inject('API_KEY') private apiKey: string,
     @Inject('TASKS') private tasks: any[], // 👈 inject TASKS el cual es un array de cualquier cosa
+    @Inject('MONGO') private database: Db, // 👈 inject MONGO el cual es una base de datos
     @Inject(config.KEY) private configService: ConfigType<typeof config>, // 👈 inject ConfigType
   ) {} // 👈 Injectando API_KEY de manera segura
 
@@ -16,4 +19,5 @@ export class AppService {
     // Imprimos el valor de inyectado
     return `Hello World! ${apiKey} ${name}`;
   }
+  getTasks() {} // 👈 Create new method
 }
