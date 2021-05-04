@@ -22,10 +22,24 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
-## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Curso de NestJS: Programación Modular
 
+
+### Proyecto del curso
+![Proyect](https://static.platzi.com/media/landing-projects/Proyecto-1.png)
+## Backend de PlatziStore - Módulos
+
+Crea la segunda versión de tu API REST con NestJS, organiza tu proyecto web usando módulos, documenta tus endpoints de forma automática y despliega tu aplicación a Heroku.
+
+## Documentation
+```bash
+# Develop
+$ http://localhost:3000
+
+# Documentation con nestjs
+ http://localhost:3000/docs/
+```
 ## Installation
 
 ```bash
