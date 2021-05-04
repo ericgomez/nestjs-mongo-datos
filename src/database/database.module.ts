@@ -1,5 +1,6 @@
 import { Module, Global } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config'; // Configuracion de typado
+import { MongooseModule } from '@nestjs/mongoose'; // 👈 Import
 import { MongoClient } from 'mongodb';
 
 import config from '../config'; // 👈 import config
@@ -11,6 +12,31 @@ const API_KEY_PROD = 'PROD1212121SA';
 // Los módulos globales deben registrarse solo una vez , generalmente por el módulo raíz o principal
 @Global()
 @Module({
+  imports: [
+    // 👈 forRootAsync configuramos de manera Async que quiere decir que primero necesito las variables de entorno
+    MongooseModule.forRootAsync({
+      // 👈 Implement Module useFactory que permite inyeccion de dependencias
+      useFactory: (configService: ConfigType<typeof config>) => {
+        const {
+          connection,
+          user,
+          password,
+          host,
+          port,
+          dbName,
+        } = configService.mongo; // 👈 Obtenemos la configuracion de las variables de entorno de mongo
+
+        // Retornmos un Objeto
+        return {
+          uri: `${connection}://${host}:${port}`, // Indicamos la conexion
+          user, // Indicamos el usuario
+          pass: password, // Indicamos el password
+          dbName, // Inidamos el nombre de la base de datos
+        };
+      },
+      inject: [config.KEY], // 👈 Inject dependecias que queremos inyectar
+    }),
+  ],
   providers: [
     {
       // El API_KEY token se resolverá en el process.env.NODE_ENV objeto simulado
@@ -47,6 +73,6 @@ const API_KEY_PROD = 'PROD1212121SA';
   ],
   // Con exports indicamos que nuestro provide pueda ser utilizado por cualquier componente
   // y no se necesitara ser importado en los componentes
-  exports: ['API_KEY', 'MONGO'], // Exportamos
+  exports: ['API_KEY', 'MONGO', MongooseModule], // Exportamos
 })
 export class DatabaseModule {}
