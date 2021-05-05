@@ -12,8 +12,10 @@ import {
 import { CategoriesService } from '../services/categories.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './../dtos/category.dtos';
 
-@Controller('categories')
+// NO necesitamos agregar la ruta de products en nuestros @Gets por que ya esta definido en el @Controller
+@Controller('categories') // NO necesitamos agregar la ruta de products en nuestros @Gets por que ya esta definido en el @Controller
 export class CategoriesController {
+  // Para incluir un servicio en un controlador usas el patrón de inyección de dependencias
   constructor(private categoriesService: CategoriesService) {}
 
   @Get()

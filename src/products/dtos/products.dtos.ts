@@ -45,6 +45,8 @@ export class CreateProductDto {
   readonly category: CreateCategoryDto; // 👈 new field
 }
 
+// PartialType permite reutilizar codigo utilizarndo las mismas validaciones y caracteristicas del clase que se extiende (CreateProductDto)
+// y simplemente los atributos los hace opcionales
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
 
 // 👈 new DTO

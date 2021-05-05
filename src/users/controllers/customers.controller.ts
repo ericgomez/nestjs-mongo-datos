@@ -6,14 +6,14 @@ import {
   Body,
   Put,
   Delete,
-  ParseIntPipe,
 } from '@nestjs/common';
 
 import { CustomersService } from '../services/customers.service';
 import { CreateCustomerDto, UpdateCustomerDto } from '../dtos/customer.dto';
 
-@Controller('customers')
+@Controller('customers') // NO necesitamos agregar la ruta de products en nuestros @Gets por que ya esta definido en el @Controller
 export class CustomerController {
+  // Para incluir un servicio en un controlador usas el patrón de inyección de dependencias
   constructor(private customersService: CustomersService) {}
 
   @Get()
@@ -22,7 +22,7 @@ export class CustomerController {
   }
 
   @Get(':id')
-  get(@Param('id', ParseIntPipe) id: number) {
+  get(@Param('id') id: string) {
     return this.customersService.findOne(id);
   }
 
@@ -32,15 +32,12 @@ export class CustomerController {
   }
 
   @Put(':id')
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() payload: UpdateCustomerDto,
-  ) {
+  update(@Param('id') id: string, @Body() payload: UpdateCustomerDto) {
     return this.customersService.update(id, payload);
   }
 
   @Delete(':id')
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.customersService.remove(+id);
+  remove(@Param('id') id: string) {
+    return this.customersService.remove(id);
   }
 }

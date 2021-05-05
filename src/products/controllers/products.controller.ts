@@ -27,8 +27,9 @@ import {
 import { ProductsService } from './../services/products.service';
 
 @ApiTags('products') // 👈 Agregar un tag en la docuemntacion para separarlo por el grupo products
-@Controller('products')
+@Controller('products') // NO necesitamos agregar la ruta de products en nuestros @Gets por que ya esta definido en el @Controller
 export class ProductsController {
+  // Para incluir un servicio en un controlador usas el patrón de inyección de dependencias
   constructor(private productsService: ProductsService) {}
 
   @Get()

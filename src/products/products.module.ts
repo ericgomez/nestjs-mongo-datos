@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Product, ProductSchema } from './entities/product.entity';
+import { Brand, BrandSchema } from './entities/brand.entity';
 
 import { ProductsController } from './controllers/products.controller';
 import { BrandsController } from './controllers/brands.controller';
@@ -17,6 +18,10 @@ import { CategoriesService } from './services/categories.service';
       {
         name: Product.name, // Indicamos el nombre del esquema
         schema: ProductSchema, // El esquema a utilizar
+      },
+      {
+        name: Brand.name, // Indicamos el nombre del esquema
+        schema: BrandSchema, // El esquema a utilizar
       },
     ]),
   ],

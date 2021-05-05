@@ -1,25 +1,22 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
 
 import { Brand } from '../entities/brand.entity';
 import { CreateBrandDto, UpdateBrandDto } from '../dtos/brand.dtos';
 
 @Injectable()
 export class BrandsService {
-  private counterId = 1;
-  private brands: Brand[] = [
-    {
-      id: 1,
-      name: 'Brand 1',
-      image: 'https://i.imgur.com/U4iGx1j.jpeg',
-    },
-  ];
+  constructor(@InjectModel(Brand.name) private brandModel: Model<Brand>) {} // 👈 Indicamos que necesitamos inyectar Brand.name y agregamos tipado
 
   findAll() {
-    return this.brands;
+    return this.brandModel.find().exec(); // exec() indicamos la ejecucion
   }
 
-  findOne(id: number) {
-    const product = this.brands.find((item) => item.id === id);
+  // Cambiamos el tipado de id dado que de Mongo recibimos Strings
+  async findOne(id: string) {
+    const product = await this.brandModel.findOne({ _id: id }).exec(); // buscamos el produto por el id
+    // Validamos si existen el producto
     if (!product) {
       throw new NotFoundException(`Brand #${id} not found`);
     }
@@ -27,31 +24,29 @@ export class BrandsService {
   }
 
   create(data: CreateBrandDto) {
-    this.counterId = this.counterId + 1;
-    const newBrand = {
-      id: this.counterId,
-      ...data,
-    };
-    this.brands.push(newBrand);
-    return newBrand;
+    const newBrand = new this.brandModel(data); // Creamos una nueva instancia de un modelo y le enviamos al informacion
+    return newBrand.save(); // Gurdamos la Marca y lo retornamos
   }
 
-  update(id: number, changes: UpdateBrandDto) {
-    const brand = this.findOne(id);
-    const index = this.brands.findIndex((item) => item.id === id);
-    this.brands[index] = {
-      ...brand,
-      ...changes,
-    };
-    return this.brands[index];
-  }
+  // Cambiamos el tipado de id dado que de Mongo recibimos Strings
+  async update(id: string, changes: UpdateBrandDto) {
+    const product = await this.brandModel
+      // $set indicamos que solo cambie los atributos modifcados y No todo el modelo
+      // new: true es una bandera que indica que nos muestre la nueva version del  producto actualizado
+      .findByIdAndUpdate(id, { $set: changes }, { new: true })
+      .exec();
 
-  remove(id: number) {
-    const index = this.brands.findIndex((item) => item.id === id);
-    if (index === -1) {
+    // Si el producto no exite
+    if (!product) {
       throw new NotFoundException(`Brand #${id} not found`);
     }
-    this.brands.splice(index, 1);
-    return true;
+
+    // Si el producto existe lo retornamos
+    return product;
+  }
+
+  // Cambiamos el tipado de id dado que de Mongo recibimos Strings
+  remove(id: string) {
+    return this.brandModel.findByIdAndDelete(id); // Ejecutamos el metodo que busca por id y lo elimina
   }
 }
