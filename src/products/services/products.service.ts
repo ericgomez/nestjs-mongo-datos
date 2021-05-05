@@ -29,9 +29,14 @@ export class ProductsService {
         // $gte representa el >= y $lte representa <=
         filters.price = { $gte: minPrice, $lte: maxPrice };
       }
-      return this.productModel.find(filters).skip(offset).limit(limit).exec(); // 👈 retornamos los productos pero con los filtros para la paginacion
+      return this.productModel
+        .find(filters)
+        .populate('brand') // 👈 Realizamos el JOIN hacia el atributo brand
+        .skip(offset)
+        .limit(limit)
+        .exec(); // 👈 retornamos los productos pero con los filtros para la paginacion
     }
-    return this.productModel.find().exec(); // exec() indicamos la ejecucion
+    return this.productModel.find().populate('brand').exec(); // exec() indicamos la ejecucion
   }
 
   // Cambiamos el tipado de id dado que de Mongo recibimos Strings

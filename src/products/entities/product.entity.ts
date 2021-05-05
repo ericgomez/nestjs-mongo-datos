@@ -1,5 +1,7 @@
 import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
+
+import { Brand } from './brand.entity';
 
 @Schema() // El decorador @Schema() marca una clase como definición de esquema.
 export class Product extends Document {
@@ -29,8 +31,12 @@ export class Product extends Document {
     }),
   )
   category: Record<string, any>; // 👈 Forma de resolver una relacion
+
+  @Prop({ type: Types.ObjectId, ref: Brand.name }) // 👈  // Indicamos que la variable sera una propiedad de tipo ObjectId, tambien es una referencia Brand.name
+  brand: Brand | Types.ObjectId; // El atributo puede tomar dos valores un Objeto: Brand o un ObjectId: Types.ObjectId
 }
 
+// Relaciones uno a uno referenciadas
 export const ProductSchema = SchemaFactory.createForClass(Product); // Exportamos un esquema apartir de la clase Product
 // 👈 Otra forma es una indexacion compuesta
 ProductSchema.index({ price: 1, stock: -1 }); // En price indicamos el orden ascendente y en stock indicamos el orden descendente

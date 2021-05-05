@@ -8,6 +8,7 @@ import {
   Min, // 👈 new decorator
   ValidateIf, // 👈 new decorator que Vuelve condional algunos parametros
   ValidateNested, // 👈 new decorator que permite realizar validaciones en cascada
+  IsMongoId, // 👈 new decorator
 } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger'; // swagger espara docuemtar la API
 import { CreateCategoryDto } from './category.dtos'; // Importamos category.dtos
@@ -43,6 +44,10 @@ export class CreateProductDto {
   @ValidateNested() // Indicamos que category contendra otro docuemnto demanera embebida en cascada
   @ApiProperty() // Permite que swagger comprenda el tipo de datos de los campos json y más
   readonly category: CreateCategoryDto; // 👈 new field
+
+  @IsNotEmpty() // Indicamos que category no sera vacio
+  @IsMongoId() // Decorador para validar que sea un id de mongo
+  readonly brand: string; // 👈 new field
 }
 
 // PartialType permite reutilizar codigo utilizarndo las mismas validaciones y caracteristicas del clase que se extiende (CreateProductDto)
