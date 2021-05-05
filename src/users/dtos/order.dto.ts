@@ -18,4 +18,6 @@ export class CreateOrderDto {
 
 // PartialType permite reutilizar codigo utilizarndo las mismas validaciones y caracteristicas del clase que se extiende (CreateOrderDto)
 // y simplemente los atributos los hace opcionales
-export class UpdateOrderDto extends PartialType(CreateOrderDto) {}
+export class UpdateOrderDto extends PartialType(
+  OmitType(CreateOrderDto, ['products']), // 👈 implement OmitType -> Generar un tipo derivado de CreateOrderDto que tenga todas las propiedades excepto los products
+) {}

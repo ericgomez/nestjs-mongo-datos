@@ -11,7 +11,11 @@ export class OrdersService {
   constructor(@InjectModel(Order.name) private orderModel: Model<Order>) {} // 👈 Indicamos que necesitamos inyectar Order.name y agregamos tipado
 
   findAll() {
-    return this.orderModel.find().exec();
+    return this.orderModel
+      .find()
+      .populate('customer') // 👈 Realizamos el JOIN hacia el atributo customer -> 1:1
+      .populate('products') // 👈 Realizamos el JOIN hacia el atributo products -> 1:N
+      .exec();
   }
 
   // Cambiamos el tipado de id dado que de Mongo recibimos Strings
