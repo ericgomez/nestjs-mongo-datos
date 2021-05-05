@@ -23,14 +23,13 @@
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
 
-# Curso de NestJS: Programación Modular
-
+# Curso de NestJS: Persistencia de Datos con MongoDB
+#### Parte 2
 
 ### Proyecto del curso
-![Proyect](https://static.platzi.com/media/landing-projects/Proyecto-1.png)
-## Backend de PlatziStore - Módulos
-
-Crea la segunda versión de tu API REST con NestJS, organiza tu proyecto web usando módulos, documenta tus endpoints de forma automática y despliega tu aplicación a Heroku.
+![Proyect](https://static.platzi.com/media/landing-projects/Proyecto-2.png)
+## Backend de PlatziStore - Conexión a MongoDB
+Crea la tercera versión de tu API REST con NestJS interactuando con una base de datos NoSQL de verdad. Configura Docker para funcionar correctamente con MongoDB y todo su stack de herramientas para desarrollo web.
 
 ## Documentation
 ```bash
