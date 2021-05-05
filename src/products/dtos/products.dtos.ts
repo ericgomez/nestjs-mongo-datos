@@ -9,9 +9,14 @@ import {
   ValidateIf, // 👈 new decorator que Vuelve condional algunos parametros
   ValidateNested, // 👈 new decorator que permite realizar validaciones en cascada
   IsMongoId, // 👈 new decorator
+  IsArray, // 👈 new decorator
 } from 'class-validator';
 import { ApiProperty, PartialType } from '@nestjs/swagger'; // swagger espara docuemtar la API
 import { CreateCategoryDto } from './category.dtos'; // Importamos category.dtos
+
+import { Type } from 'class-transformer'; // 👈 transform
+
+import { CreateSubDocDto } from './sub-doc.dto'; // 👈 import
 
 export class CreateProductDto {
   @IsString()
@@ -48,6 +53,16 @@ export class CreateProductDto {
   @IsNotEmpty() // Indicamos que category no sera vacio
   @IsMongoId() // Decorador para validar que sea un id de mongo
   readonly brand: string; // 👈 new field
+
+  @IsNotEmpty()
+  @ValidateNested() // permite realizar validaciones en cascada
+  readonly subDoc: CreateSubDocDto; // 👈 1:1
+
+  @IsNotEmpty()
+  @IsArray()
+  @ValidateNested({ each: true }) // permite realizar validaciones en cascada y valida una matriz de objetos
+  @Type(() => CreateSubDocDto)
+  readonly subDocs: CreateSubDocDto[]; // 👈 1:N
 }
 
 // PartialType permite reutilizar codigo utilizarndo las mismas validaciones y caracteristicas del clase que se extiende (CreateProductDto)

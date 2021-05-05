@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory, raw } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 
 import { Brand } from './brand.entity';
+import { SubDoc, SubDocSchema } from './sub-doc.entity'; // 👈 importamos
 
 @Schema() // El decorador @Schema() marca una clase como definición de esquema.
 export class Product extends Document {
@@ -34,6 +35,12 @@ export class Product extends Document {
 
   @Prop({ type: Types.ObjectId, ref: Brand.name }) // 👈  // Indicamos que la variable sera una propiedad de tipo ObjectId, tambien es una referencia Brand.name
   brand: Brand | Types.ObjectId; // El atributo puede tomar dos valores un Objeto: Brand o un ObjectId: Types.ObjectId
+
+  @Prop({ type: SubDocSchema })
+  subDoc: SubDoc; // 👈 new field (1:1)
+
+  @Prop({ type: [SubDocSchema] })
+  subDocs: Types.Array<SubDoc>; // 👈 new field (1:N)
 }
 
 // Relaciones uno a uno referenciadas
