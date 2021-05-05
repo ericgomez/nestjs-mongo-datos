@@ -21,3 +21,10 @@ export class CreateOrderDto {
 export class UpdateOrderDto extends PartialType(
   OmitType(CreateOrderDto, ['products']), // 👈 implement OmitType -> Generar un tipo derivado de CreateOrderDto que tenga todas las propiedades excepto los products
 ) {}
+
+// DTO Especial para agregar productos a una orden
+export class AddProductsToOrderDto {
+  @IsArray() // Decorador para validar que sea un array
+  @IsNotEmpty() // Decorador para validar campos no vacios
+  readonly productsIds: string[];
+}

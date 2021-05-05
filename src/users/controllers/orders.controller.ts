@@ -10,7 +10,11 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 
 import { OrdersService } from '../services/orders.service';
-import { CreateOrderDto, UpdateOrderDto } from '../dtos/order.dto';
+import {
+  CreateOrderDto,
+  UpdateOrderDto,
+  AddProductsToOrderDto,
+} from '../dtos/order.dto';
 
 @ApiTags('orders') // 👈 Agregar un tag en la docuemntacion para separarlo por el grupo products
 @Controller('orders') // NO necesitamos agregar la ruta de products en nuestros @Gets por que ya esta definido en el @Controller
@@ -38,8 +42,22 @@ export class OrdersController {
     return this.ordersService.update(id, payload);
   }
 
+  @Put(':id/products') // 👈 add product by order
+  addProducts(@Param('id') id: string, @Body() payload: AddProductsToOrderDto) {
+    return this.ordersService.addProducts(id, payload.productsIds); // Mandamos llamar al metodo addProducts del servicio
+  }
+
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.ordersService.remove(id);
+  }
+
+  @Delete(':id/product/:productId') // 👈 delete product by order
+  removeProduct(
+    // Recibimos los parametros
+    @Param('id') id: string,
+    @Param('productId') productId: string,
+  ) {
+    return this.ordersService.removeProduct(id, productId); // Mandamos llamar al metodo removeProduct del servicio
   }
 }

@@ -39,4 +39,21 @@ export class OrdersService {
   remove(id: string) {
     return this.orderModel.findByIdAndDelete(id);
   }
+
+  // Add product a una order
+  // 👈 Parametros de entrada: id: de la order y el arreglo de los productIds a agregar
+  async addProducts(id: string, productsIds: string[]) {
+    const order = await this.orderModel.findById(id); // Realializo la busqueda por el identificador y lo guardo en order
+    // Realizamos un recorrido de los elementos con forEach
+    productsIds.forEach((pId) => order.products.push(pId)); // Como products es un Type.Array podemos usar el metodo push para agregar
+    return order.save(); // Guardamos en mongo la order
+  }
+
+  // Remover product de una order
+  // 👈 Parametros de entrada: id: de la order y el productId a remover
+  async removeProduct(id: string, productId: string) {
+    const order = await this.orderModel.findById(id); // Realializo la busqueda por el identificador y lo guardo en order
+    order.products.pull(productId); // Como products es un Type.Array podemos usar el metodo pull para eliminar
+    return order.save(); // Guardamos en mongo la order
+  }
 }
